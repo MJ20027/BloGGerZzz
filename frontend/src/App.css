@@ -1,0 +1,12 @@
+
+div .darkmode {
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+body {
+    color: #222;
+    /* background-color: rgb(226, 248, 248); */
+    /* background-image: url('./Untitled.jpeg'); */
+    /* border-color: #aaa; */
+    /* height: 50%; */
+}

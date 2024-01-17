@@ -10,7 +10,7 @@ const authRoute=require('./routes/auth')
 const userRoute=require('./routes/users')
 const postRoute=require('./routes/posts')
 const commentRoute=require('./routes/comments')
-
+const PORT=process.env.PORT || 5000;
 //database
 const connectDB=async()=>{
     try{
@@ -58,7 +58,7 @@ app.use("/api/comments",commentRoute)
 // })
 
 
-app.listen(5000,()=>{
-    connectDB()
-    console.log("app is running on port "+5000)
-})
+app.listen(PORT, () => {
+  connectDB();
+  console.log("app is running on port " + PORT);
+});

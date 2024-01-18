@@ -83,7 +83,7 @@ const Home = () => {
                 <HomePosts key={post._id} post={post} />
               </Link>
             </>
-          ))
+          )).reverse()
         ) : (
           <h3 className="text-center font-bold mt-16">No posts available</h3>
         )}

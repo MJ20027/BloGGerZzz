@@ -11,6 +11,7 @@ const HomePosts = ({post}) => {
           src={post.photo}
           alt=""
           className="h-full w-full object-cover "
+          loading="lazy"
         />
         
       </div>

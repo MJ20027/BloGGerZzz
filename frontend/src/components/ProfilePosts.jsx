@@ -7,7 +7,7 @@ const ProfilePosts = ({p}) => {
     <div className=" outline outline-offset-2 px-1 py-1 outline-gray-200 rounded w-full sm:flex mt-8 space-x-4">
       {/* left */}
       <div className="sm:w-[35%] sm:h-[200px] flex justify-center items-center">
-        <img src={p.photo} alt="" className="h-full w-full object-cover" />
+        <img src={p.photo} alt="" className="h-full w-full object-cover" loading="lazy"/>
       </div>
       {/* right */}
       <div className="flex flex-col sm:w-[65%]">

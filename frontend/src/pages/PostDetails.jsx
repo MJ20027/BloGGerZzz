@@ -128,6 +128,7 @@ const PostDetails = () => {
             src={post.photo}
             className=" outline px-0 py-0 outline-gray-300 rounded outline-1 my-auto mx-auto mt-6"
             alt=""
+            loading="lazy"
           />
           <p className=" outline px-3 py-2 rounded outline-1 outline-gray-300 mx-auto mt-8">
             <div dangerouslySetInnerHTML={{ __html: post.desc }}></div>

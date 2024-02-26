@@ -1,75 +1,71 @@
-import axios from "axios"
-import Footer from "../components/Footer"
-import HomePosts from "../components/HomePosts"
-import Navbar from "../components/Navbar"
-import { IF, URL } from "../url"
-import { useContext, useEffect, useState } from "react"
-import { Link, useLocation } from "react-router-dom"
-import Loader from '../components/Loader'
-import { UserContext } from "../context/UserContext"
-import ThemeContext from "../context/ThemeContext"
-import "../CSS/Home.css"
- import { ToastContainer, toast } from "react-toastify";
- import "react-toastify/dist/ReactToastify.css";
-import ExtraNavbar from "../components/ExtraNavbar"
- 
+import axios from "axios";
+import { debounce } from "lodash";
+import Footer from "../components/Footer";
+import HomePosts from "../components/HomePosts";
+import Navbar from "../components/Navbar";
+import { IF, URL } from "../url";
+import { useContext, useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import Loader from "../components/Loader";
+import { UserContext } from "../context/UserContext";
+import ThemeContext from "../context/ThemeContext";
+import "../CSS/Home.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ExtraNavbar from "../components/ExtraNavbar";
 
 const Home = () => {
-
-  const {search}=useLocation()
+  const { search } = useLocation();
   // console.log(search)
-  const [posts,setPosts]=useState([])
-  const [noResults,setNoResults]=useState(false)
-  const [loader,setLoader]=useState(false)
-  const {user}=useContext(UserContext)
+  const [posts, setPosts] = useState([]);
+  const [noResults, setNoResults] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const { user } = useContext(UserContext);
   const theme = useContext(ThemeContext);
   // console.log(theme);
-      // useEffect(() => {
-      //        toast.success("Logged In Sucessfully", {
-      //          position: "top-center",
-      //          autoClose: 2000,
-      //          hideProgressBar: false,
-      //          closeOnClick: true,
-      //          pauseOnHover: true,
-      //          draggable: true,
-      //          progress: undefined,
-      //          theme: "dark",
-               
-      //        });
-      // }, [user]);
-  const fetchPosts=async()=>{
-    setLoader(true)
-    try{
-      const res=await axios.get(URL+"/api/posts/"+search)
-      console.log(res.data)
-      setPosts(res.data)
-      if(res.data.length===0){
-        setNoResults(true)
+  // useEffect(() => {
+  //        toast.success("Logged In Sucessfully", {
+  //          position: "top-center",
+  //          autoClose: 2000,
+  //          hideProgressBar: false,
+  //          closeOnClick: true,
+  //          pauseOnHover: true,
+  //          draggable: true,
+  //          progress: undefined,
+  //          theme: "dark",
+
+  //        });
+  // }, [user]);
+  const fetchPosts = debounce(async () => {
+    setLoader(true);
+    try {
+      const res = await axios.get(URL + "/api/posts/" + search);
+      console.log(res.data);
+      setPosts(res.data);
+      if (res.data.length === 0) {
+        setNoResults(true);
+      } else {
+        setNoResults(false);
       }
-      else{
-        setNoResults(false)
-      }
-      setLoader(false)
-      
+      setLoader(false);
+    } catch (err) {
+      console.log(err);
+      setLoader(true);
     }
-    catch(err){
-      console.log(err)
-      setLoader(true)
-    }
-  }
+  }, 500);
 
-  useEffect(()=>{
-    fetchPosts()
-  },[search])
-
-
+  useEffect(() => {
+    // debouncedFetchPosts();
+    fetchPosts();
+    return () => fetchPosts.cancel();
+  }, [search]);
 
   return (
     <>
       <ToastContainer />
       <Navbar />
       <div className="xxsm:hidden">
-      <ExtraNavbar/>
+        <ExtraNavbar />
       </div>
       <div className={`px-8 xl:px-[300px] md:px-[92px] min-h-[80vh] ${theme}`}>
         {loader ? (
@@ -77,13 +73,15 @@ const Home = () => {
             <Loader />
           </div>
         ) : !noResults ? (
-          posts.map((post) => (
-            <>
-              <Link to={user ? `/posts/post/${post._id}` : "/login"}>
-                <HomePosts key={post._id} post={post} />
-              </Link>
-            </>
-          )).reverse()
+          posts
+            .map((post) => (
+              <>
+                <Link to={user ? `/posts/post/${post._id}` : "/login"}>
+                  <HomePosts key={post._id} post={post} />
+                </Link>
+              </>
+            ))
+            .reverse()
         ) : (
           <h3 className="text-center font-bold mt-16">No posts available</h3>
         )}
@@ -91,6 +89,6 @@ const Home = () => {
       <Footer />
     </>
   );
-}
+};
 
-export default Home
+export default Home;
